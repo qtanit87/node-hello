@@ -1,9 +1,10 @@
-#!groovy?
 
+
+properties([pipelineTriggers([githubPush()])])
 pipeline {
 
 	agent any
-	triggers { pollSCM('* * * * *') }
+	//triggers { pollSCM('* * * * *') }
     
     options {
         buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
@@ -40,7 +41,7 @@ pipeline {
 				script {
 					
 					echo "Checkout hello nodejs Code"
-					checkout([$class: 'GitSCM', branches: [[name: "*/${BRANCH_NAME}"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'admin', url: "${appgiturl}"]]])
+					checkout([$class: 'GitSCM', branches: [[name: "*/${BRANCH}"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'admin', url: "${appgiturl}"]]])
 					
 					
 					
