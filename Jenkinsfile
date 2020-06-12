@@ -1,4 +1,4 @@
-
+#!groovy?
 
 properties([pipelineTriggers([githubPush()])])
 pipeline {
