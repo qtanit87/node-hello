@@ -101,6 +101,7 @@ pipeline {
 						cd ${WORKSPACE}/
 						
 						eval $(aws ecr get-login --region ap-southeast-1 --no-include-email --profile testing)
+						/usr/local/bin/ecs-cli configure profile default --profile-name ecs-cluster
 						/usr/local/bin/ecs-cli compose down --cluster-config ecs-cluster --ecs-profile ecs-cluster
 						/usr/local/bin/ecs-cli compose service rm --cluster-config ecs-cluster --ecs-profile ecs-clusterecs-cli compose up --create-log-groups --cluster-config ecs-cluster --ecs-profile ecs-cluster
 						
