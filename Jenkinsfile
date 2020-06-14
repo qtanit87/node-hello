@@ -104,10 +104,10 @@ pipeline {
 						/usr/local/bin/ecs-cli configure profile default --profile-name ecs-cluster
 						
 						/usr/local/bin/ecs-cli compose service rm --cluster-config ecs-cluster --ecs-profile ecs-cluster
-						/usr/local/bin/ecs-cli down --force --cluster-config ecs-cluster --ecs-profile ecs-cluster
+						#/usr/local/bin/ecs-cli down --force --cluster-config ecs-cluster --ecs-profile ecs-cluster
 						
-						/usr/local/bin/ecs-cli configure --cluster ecs-cluster --default-launch-type EC2 --config-name ecs-cluster --region ap-southeast-1
-						/usr/local/bin/ecs-cli up --keypair MISR_KEY --capability-iam --size 1 --instance-type t2.medium --cluster-config ecs-cluster --ecs-profile ecs-cluster
+						#/usr/local/bin/ecs-cli configure --cluster ecs-cluster --default-launch-type EC2 --config-name ecs-cluster --region ap-southeast-1
+						#/usr/local/bin/ecs-cli up --keypair MISR_KEY --capability-iam --size 1 --instance-type t2.medium --cluster-config ecs-cluster --ecs-profile ecs-cluster
 						#/usr/local/bin/ecs-cli compose up --create-log-groups --cluster-config ecs-cluster --ecs-profile ecs-cluster
 						#/usr/local/bin/ecs-cli compose down --cluster-config ecs-cluster --ecs-profile ecs-cluster
 						/usr/local/bin/ecs-cli compose service up --cluster-config ecs-cluster --ecs-profile ecs-cluster
@@ -119,6 +119,7 @@ pipeline {
 	}
 	post ('sending email') {
 		always {
+			cleanWs()
 			script {
 					mail bcc: '', body: """
                     Jenkins Job: ${JOB_NAME}
