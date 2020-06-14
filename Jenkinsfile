@@ -104,7 +104,7 @@ pipeline {
 						/usr/local/bin/ecs-cli configure profile default --profile-name ecs-cluster
 						/usr/local/bin/ecs-cli compose down --cluster-config ecs-cluster --ecs-profile ecs-cluster
 						/usr/local/bin/ecs-cli compose service rm --cluster-config ecs-cluster --ecs-profile ecs-cluster
-						/usr/local/bin/ecs-cli compose up --create-log-groups --cluster-config ecs-cluster --ecs-profile ecs-cluster
+						/usr/local/bin/ecs-cli down --force --cluster-config ecs-cluster --ecs-profile ecs-cluster
 						
 						/usr/local/bin/ecs-cli up --keypair MISR_KEY --capability-iam --size 1 --instance-type t2.medium --cluster-config ecs-cluster --ecs-profile ecs-cluster
 						/usr/local/bin/ecs-cli compose up --create-log-groups --cluster-config ecs-cluster --ecs-profile ecs-cluster
