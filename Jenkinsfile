@@ -53,7 +53,7 @@ pipeline {
 						cd ${WORKSPACE}/
 						
 						#create Docker file
-						echo -e 'FROM node:10 \nWORKDIR /usr/src/app  \nCOPY package*.json ./ \nRUN npm install \nCOPY . . \nEXPOSE ${service_port} \nCMD [ "node", "index.js" ]' > Dockerfile
+						echo -e 'FROM node:10 \nWORKDIR /usr/src/app  \nCOPY package*.json ./ \nRUN npm install \nCOPY . . \nEXPOSE ${ecs_container_port} \nCMD [ "node", "index.js" ]' > Dockerfile
 						echo -e "node_modules \nnpm-debug.log " > .dockerignore
 						
 						#delete old image and create a new image
@@ -96,8 +96,8 @@ pipeline {
 						/usr/local/bin/ecs-cli configure profile default --profile-name ecs-cluster
 						/usr/local/bin/ecs-cli configure --cluster ${ecs_cluster} --default-launch-type EC2 --config-name ecs-cluster --region ${aws_region}
 
-						echo -e "version: '3' \nservices: \n  web: \n    image: ${ecr_profile}.dkr.ecr.${aws_region}.amazonaws.com/${image_name}:latest \n    ports: \n      - \"80:${service_port}\" \n    logging: \n      driver: awslogs \n      options: \n        awslogs-group: ecs-tutorial \n        awslogs-region: ${aws_region} \n        awslogs-stream-prefix: web" > docker-compose.yml
-						echo -e "version: 1 \ntask_definition: \n  services: \n    web: \n      cpu_shares: ${ecs_instance_cpu} \n      mem_limit: {${ecs_instance_memory}}" > ecs-params.yml
+						echo -e "version: '3' \nservices: \n  web: \n    image: ${ecr_profile}.dkr.ecr.${aws_region}.amazonaws.com/${image_name}:latest \n    ports: \n      - \"${service_port}:${ecs_container_port}\" \n    logging: \n      driver: awslogs \n      options: \n        awslogs-group: ecs-tutorial \n        awslogs-region: ${aws_region} \n        awslogs-stream-prefix: web" > docker-compose.yml
+						echo -e "version: 1 \ntask_definition: \n  services: \n    web: \n      cpu_shares: ${ecs_instance_cpu} \n      mem_limit: ${ecs_instance_memory}" > ecs-params.yml
 						echo -e "{ \n  \"envname\": \"${service_gitbranch}\" \n}" > environment.json
 						
 						cat docker-compose.yml
