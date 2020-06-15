@@ -108,7 +108,7 @@ pipeline {
 						#echo -e "version: 1 \ntask_definition: \n  services: \n    web: \n      cpu_shares: 100 \n      mem_limit: 524288000" > ecs-params.yml
 						
 						
-						#echo -e "{ \n  \"envname\": \"staging\" \n}" > environment.json
+						echo -e "{ \n  \"envname\": \"staging\" \n}" > environment.json
 						/usr/local/bin/ecs-cli compose service rm --cluster-config ecs-cluster --ecs-profile ecs-cluster
 						sleep 120
 						#/usr/local/bin/ecs-cli down --force --cluster-config ecs-cluster --ecs-profile ecs-cluster
@@ -127,7 +127,7 @@ pipeline {
 	}
 	post ('sending email') {
 		always {
-			
+			cleanWs()
 			script {
 					mail bcc: '', body: """
                     Jenkins Job: ${JOB_NAME}
