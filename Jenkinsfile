@@ -52,15 +52,14 @@ pipeline {
 				script {
 					sh returnStdout: true, script: '''
 						cd ${WORKSPACE}/
-						echo ${image_name}
-						echo ${service_gitbranch}
+						
 						#create Docker file
-						echo -e 'FROM node:10 \nWORKDIR /usr/src/app  \nCOPY package*.json ./ \nRUN npm install \nCOPY . . \nEXPOSE 3000 \nCMD [ "node", "index.js" ]' > Dockerfile
+						echo -e 'FROM node:10 \nWORKDIR /usr/src/app  \nCOPY package*.json ./ \nRUN npm install \nCOPY . . \nEXPOSE ${service_port} \nCMD [ "node", "index.js" ]' > Dockerfile
 						echo -e "node_modules \nnpm-debug.log " > .dockerignore
 						
 						#delete old image and create a new image
-						docker image rm ${imagename} | true
-						docker build -t ${imagename} .
+						docker image rm ${image_name} | true
+						docker build -t ${image_name} .
 							
 					'''
 				}
