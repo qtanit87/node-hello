@@ -130,7 +130,7 @@ pipeline {
 			
                     (Automatic notification - Please don't reply to this email. For further information, please contact DevOps Team)
                     Best Regards, 
-                    DevOps Team""", from: 'DevOps@example.com', replyTo: '', subject: "[$currentBuild.currentResult] - [${JOB_NAME}]", to: "thuynh49@dxc.com"
+                    DevOps Team""", from: 'DevOps@example.com', replyTo: '', subject: "[$currentBuild.currentResult] - [${JOB_NAME}]", to: "${email_recipients}"
 
                     
                     
