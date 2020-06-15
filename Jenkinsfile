@@ -94,16 +94,20 @@ pipeline {
 				
 						
 						/usr/local/bin/ecs-cli configure profile default --profile-name ecs-cluster
-						/usr/local/bin/ecs-cli configure --cluster ecs-cluster --default-launch-type EC2 --config-name ecs-cluster --region ${aws_region}
+						/usr/local/bin/ecs-cli configure --cluster ${ecs_cluster} --default-launch-type EC2 --config-name ecs-cluster --region ${aws_region}
 
-						echo -e "version: '3' \nservices: \n  web: \n    image: ${ecr_profile}.dkr.ecr.${aws_region}.amazonaws.com/testing:latest \n    ports: \n      - \"80:3000\" \n    logging: \n      driver: awslogs \n      options: \n        awslogs-group: ecs-tutorial \n        awslogs-region: ${aws_region} \n        awslogs-stream-prefix: web" > docker-compose.yml
-						echo -e "version: 1 \ntask_definition: \n  services: \n    web: \n      cpu_shares: 100 \n      mem_limit: 524288000" > ecs-params.yml
-						echo -e "{ \n  \"envname\": \"staging\" \n}" > environment.json
+						echo -e "version: '3' \nservices: \n  web: \n    image: ${ecr_profile}.dkr.ecr.${aws_region}.amazonaws.com/${image_name}:latest \n    ports: \n      - \"80:${service_port}\" \n    logging: \n      driver: awslogs \n      options: \n        awslogs-group: ecs-tutorial \n        awslogs-region: ${aws_region} \n        awslogs-stream-prefix: web" > docker-compose.yml
+						echo -e "version: 1 \ntask_definition: \n  services: \n    web: \n      cpu_shares: ${ecs_instance_cpu} \n      mem_limit: {${ecs_instance_memory}}" > ecs-params.yml
+						echo -e "{ \n  \"envname\": \"${service_gitbranch}\" \n}" > environment.json
 						
-						#/usr/local/bin/ecs-cli compose service rm --cluster-config ecs-cluster --ecs-profile ecs-cluster
+						cat docker-compose.yml
+						cat ecs-params.yml
+						cat environment.json
+
+						#/usr/local/bin/ecs-cli compose service rm --cluster-config ${ecs_cluster} --ecs-profile ${ecs_profile}
 						#sleep 120
 						
-						#/usr/local/bin/ecs-cli compose service up --cluster-config ecs-cluster --ecs-profile ecs-cluster
+						#/usr/local/bin/ecs-cli compose service up --cluster-config ${ecs_cluster} --ecs-profile ${ecs_profile}
 						
 					'''
 				}
