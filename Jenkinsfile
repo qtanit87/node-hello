@@ -99,7 +99,7 @@ pipeline {
 				script {
 					sh returnStdout: true, script: '''
 						cd ${WORKSPACE}/
-						
+						cat index.js
 						
 						/usr/local/bin/ecs-cli configure profile default --profile-name ecs-cluster
 						/usr/local/bin/ecs-cli configure --cluster ecs-cluster --default-launch-type EC2 --config-name ecs-cluster --region ap-southeast-1
