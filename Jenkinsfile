@@ -49,7 +49,7 @@ pipeline {
 						
 						#create Docker file
 						echo -e 'FROM node:10 \nWORKDIR /usr/src/app  \nCOPY package*.json ./ \nRUN npm install \nCOPY . . \nEXPOSE ${ecs_container_port} \nCMD [ "node", "index.js" ]' > Dockerfile
-						echo -e "node_modules \nnpm-debug.log " > .dockerignore
+						#echo -e "node_modules \nnpm-debug.log " > .dockerignore
 						
 						#delete old image and create a new image
 						echo ${image_name}
