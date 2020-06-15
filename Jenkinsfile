@@ -102,10 +102,10 @@ pipeline {
 						
 						
 
-						#/usr/local/bin/ecs-cli compose service rm --cluster-config ${ecs_cluster} --ecs-profile ${ecs_profile}
-						#sleep 120
+						/usr/local/bin/ecs-cli compose service rm --cluster-config ${ecs_cluster} --ecs-profile ${ecs_profile}
+						sleep 120
 						
-						#/usr/local/bin/ecs-cli compose service up --cluster-config ${ecs_cluster} --ecs-profile ${ecs_profile}
+						/usr/local/bin/ecs-cli compose service up --cluster-config ${ecs_cluster} --ecs-profile ${ecs_profile}
 						
 					"""
 				}
