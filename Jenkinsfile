@@ -26,7 +26,7 @@ pipeline {
 					load "${WORKSPACE}}/env.groovy"
    					echo "${env.gitowner}"
    					echo "${env.ibranch}"
-					script{				
+					script {				
 							
 							
 							env.appgiturl="https://github.com/qtanit87/node-hello.git"
@@ -130,7 +130,7 @@ pipeline {
 	}
 	post ('sending email') {
 		always {
-			cleanWs()
+			//cleanWs()
 			script {
 					mail bcc: '', body: """
                     Jenkins Job: ${JOB_NAME}
