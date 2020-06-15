@@ -106,7 +106,7 @@ pipeline {
 
 						echo -e "version: '3' \nservices: \n  web: \n    image: 688881585294.dkr.ecr.ap-southeast-1.amazonaws.com/testing:latest \n    ports: \n      - \"80:3000\" \n    logging: \n      driver: awslogs \n      options: \n        awslogs-group: ecs-tutorial \n        awslogs-region: ap-southeast-1 \n        awslogs-stream-prefix: web" > docker-compose.yml
 						echo -e "version: 1 \ntask_definition: \n  services: \n    web: \n      cpu_shares: 100 \n      mem_limit: 524288000" > ecs-params.yml
-						echo -e "environment=staging\n" > .env
+						echo -e "{ \n  "name": "node-hello" \n}" > environment.json
 						/usr/local/bin/ecs-cli compose service rm --cluster-config ecs-cluster --ecs-profile ecs-cluster
 						sleep 120
 						#/usr/local/bin/ecs-cli down --force --cluster-config ecs-cluster --ecs-profile ecs-cluster
