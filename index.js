@@ -6,7 +6,7 @@ const envinfo = require('./environment.json');
 const server = http.createServer((req, res) => {
   res.statusCode = 200;
   const msg = 'Hello World!'
-  res.write(`${msg} ${appinfo.name}-${appinfo.version} `);
+  res.write(`${msg} ${appinfo.name}-${appinfo.version} ${envinfo.envname}`);
   res.end();
 });
 
