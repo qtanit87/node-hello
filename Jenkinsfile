@@ -23,7 +23,7 @@ pipeline {
 		stage('load env') { 
 			
 			steps {
-					load "$JENKINS_HOME/env.groovy"
+					load "${WORKSPACE}}/env.groovy"
    					echo "${env.gitowner}"
    					echo "${env.ibranch}"
 					script{				
