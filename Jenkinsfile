@@ -108,7 +108,7 @@ pipeline {
 						echo -e "version: 1 \ntask_definition: \n  services: \n    web: \n      cpu_shares: 100 \n      mem_limit: 524288000" > ecs-params.yml
 						echo -e "environment=staging\n" > .env
 						/usr/local/bin/ecs-cli compose service rm --cluster-config ecs-cluster --ecs-profile ecs-cluster
-						sleep 20
+						sleep 120
 						#/usr/local/bin/ecs-cli down --force --cluster-config ecs-cluster --ecs-profile ecs-cluster
 						
 						
