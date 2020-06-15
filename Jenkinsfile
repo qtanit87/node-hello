@@ -17,8 +17,8 @@ pipeline {
 			
 			steps {
 					load "${WORKSPACE}/env.groovy"
-   					echo "${env.gitowner}"
-   					echo "${env.ibranch}"
+   					echo "${env.service_giturl}"
+   					echo "${env.service_gitbranch}"
 					script {
 
 							def VERSION = VersionNumber projectStartDate: '', versionNumberString: '${BUILD_DATE_FORMATTED, "yyyy_MM_dd"}_${BUILD_NUMBER}', versionPrefix: ''
@@ -28,22 +28,14 @@ pipeline {
 			}
 		}
 		
-		stage('cloning code') { 
-			
-			steps {
-				script {
-					echo "${env.ibranch}"
-					echo "Checkout hello nodejs Code"
-					checkout([$class: 'GitSCM', branches: [[name: "*/${BRANCH_NAME}"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'admin', url: "${appgiturl}"]]])
-					
-					
-					
-				}
-			}
-		} 
+		
+	
+
+
 		
 		stage('Build nodejs code') {
 			steps {
+				//using bash script to build node js code with npm
 				script {
 					sh returnStdout: true, script: '''
 						cd ${WORKSPACE}/
@@ -56,16 +48,17 @@ pipeline {
 
 		stage('Build docker image') {
 			steps {
+				//using bash scripts to create Dockerfile and build docker image with docker commands
 				script {
 					sh returnStdout: true, script: '''
 						cd ${WORKSPACE}/
-						
+						echo ${env.image_name}
+						#create Docker file
 						echo -e 'FROM node:10 \nWORKDIR /usr/src/app  \nCOPY package*.json ./ \nRUN npm install \nCOPY . . \nEXPOSE 3000 \nCMD [ "node", "index.js" ]' > Dockerfile
-
 						echo -e "node_modules \nnpm-debug.log " > .dockerignore
 						
+						#delete old image and create a new image
 						docker image rm ${imagename} | true
-
 						docker build -t ${imagename} .
 							
 					'''
