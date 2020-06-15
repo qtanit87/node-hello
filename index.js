@@ -4,7 +4,7 @@ const port = process.env.PORT || 3000;
 
 const server = http.createServer((req, res) => {
   res.statusCode = 200;
-  const msg = 'Oddle Hello World!'
+  const msg = 'Oddle Hello!'
   res.write(msg);
   res.end();
 });
