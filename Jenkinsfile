@@ -1,24 +1,23 @@
 #!groovy?
 
+//enable pipeline trigger whenever there is a new commit push to github repository
 properties([pipelineTriggers([githubPush()])])
 pipeline {
 
-	agent any
-	
-	
+	agent any	
     
     options {
+		//maintaining maximum 10 jenkins build log.
         buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
         disableConcurrentBuilds()
     }
 
 	stages {
-		stage('load env') { 
+		stage('Loading env') { 
 			
 			steps {
+					//loading environment variables from env.groovy file
 					load "${WORKSPACE}/env.groovy"
-   					echo "${env.service_giturl}"
-   					echo "${env.service_gitbranch}"
 					script {
 
 							def VERSION = VersionNumber projectStartDate: '', versionNumberString: '${BUILD_DATE_FORMATTED, "yyyy_MM_dd"}_${BUILD_NUMBER}', versionPrefix: ''
@@ -33,7 +32,7 @@ pipeline {
 
 
 		
-		stage('Build nodejs code') {
+		stage('Building nodejs code') {
 			steps {
 				//using bash script to build node js code with npm
 				script {
@@ -46,7 +45,7 @@ pipeline {
 			}
     	}
 
-		stage('Build docker image') {
+		stage('Building docker image') {
 			steps {
 				//using bash scripts to create Dockerfile and build docker image with docker commands
 				script {
@@ -67,26 +66,32 @@ pipeline {
 			}
     	}
 
-		stage('upload docker image to aws ecr') {
+		stage('Uploading docker image to aws ecr') {
 			steps {
+				//using aws cli to login aws profile which is saved on jenkins server
+				//using docker commands to tag image with value "latest" and to push docker image to aws ecr
 				script {
 					sh returnStdout: true, script: '''
 						cd ${WORKSPACE}/
-						
+						#logging in aws profile
 						eval $(aws ecr get-login --region ${aws_region} --no-include-email --profile ${aws_profile})
+
+						#tagging docker image
 						docker tag ${image_name}:latest ${ecr_profile}.dkr.ecr.${aws_region}.amazonaws.com/${image_name}:latest
+
+						#pushing docker image to aws ecr
 						docker push ${ecr_profile}.dkr.ecr.${aws_region}.amazonaws.com/${image_name}:latest
 					'''
 				}
 			}
     	}
 
-		stage('deploy docker image to aws ecs cluster') {
+		stage('Deploying docker image to aws ecs cluster') {
 			steps {
 				script {
 					sh returnStdout: true, script: '''
 						cd ${WORKSPACE}/
-						cat index.js
+				
 						
 						/usr/local/bin/ecs-cli configure profile default --profile-name ecs-cluster
 						/usr/local/bin/ecs-cli configure --cluster ecs-cluster --default-launch-type EC2 --config-name ecs-cluster --region ${aws_region}
@@ -106,7 +111,7 @@ pipeline {
     	}
 		
 	}
-	post ('sending email') {
+	post ('Cleaning up workspace and sending notification email') {
 		always {
 			//cleanWs()
 			script {
