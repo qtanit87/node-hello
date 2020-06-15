@@ -12,13 +12,6 @@ pipeline {
         disableConcurrentBuilds()
     }
 
-	environment {
-	
-		imagename="testing"
-
-	
-	}
-
 	stages {
 		stage('load env') { 
 			
