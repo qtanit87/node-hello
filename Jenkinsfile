@@ -5,11 +5,7 @@ pipeline {
 
 	agent any
 	
-	node {
-		load "$JENKINS_HOME/env.groovy"
-   		echo "${env.gitowner}"
-   		echo "${env.ibranch}"
-	}
+	
     
     options {
         buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
@@ -27,6 +23,9 @@ pipeline {
 		stage('load env') { 
 			
 			steps {
+					load "$JENKINS_HOME/env.groovy"
+   					echo "${env.gitowner}"
+   					echo "${env.ibranch}"
 					script{				
 							
 							
