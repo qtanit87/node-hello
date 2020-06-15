@@ -88,23 +88,29 @@ pipeline {
 
 		stage('Deploying docker image to aws ecs cluster') {
 			steps {
+				
+				//bash scripts: creating configuration files (docker-compose.yml, ecs-params.yml) to turn on ecs container and environment file (environment.json) to pass environment value (github branch) to index.js file 
+				//using ecs cli to login ecs cluster profile, remove current ecs service, and create a new ecs service
 				script {
 					sh returnStdout: true, script: """
 						cd ${WORKSPACE}/
 				
-						
+						#logging in ecs profile
 						/usr/local/bin/ecs-cli configure profile default --profile-name ecs-cluster
 						/usr/local/bin/ecs-cli configure --cluster ${ecs_cluster} --default-launch-type EC2 --config-name ecs-cluster --region ${aws_region}
-
+						
+						#creating configuration files
 						echo -e "version: '3' \nservices: \n  web: \n    image: ${ecr_profile}.dkr.ecr.${aws_region}.amazonaws.com/${image_name}:latest \n    ports: \n      - \"${service_port}:${ecs_container_port}\" \n    logging: \n      driver: awslogs \n      options: \n        awslogs-group: ecs-tutorial \n        awslogs-region: ${aws_region} \n        awslogs-stream-prefix: web" > docker-compose.yml
 						echo -e "version: 1 \ntask_definition: \n  services: \n    web: \n      cpu_shares: ${ecs_container_cpu} \n      mem_limit: ${ecs_container_memory}" > ecs-params.yml
 						echo -e "{ \n  \\\"envname\\\": \\\"${service_gitbranch}\\\" \n}" > environment.json
 						
-						
-
+						#removing current ecs service
 						/usr/local/bin/ecs-cli compose service rm --cluster-config ${ecs_cluster} --ecs-profile ${ecs_profile}
+
+						#time wait for ecs instance to draint
 						sleep 120
 						
+						#creating new esc service
 						/usr/local/bin/ecs-cli compose service up --cluster-config ${ecs_cluster} --ecs-profile ${ecs_profile}
 						
 					"""
@@ -115,7 +121,10 @@ pipeline {
 	}
 	post ('Cleaning up workspace and sending notification email') {
 		always {
-			//cleanWs()
+			//cleaning up jenkins job workspace
+			cleanWs()
+
+			//sending notification email to management team
 			script {
 					mail bcc: '', body: """
                     Jenkins Job: ${JOB_NAME}
@@ -123,7 +132,7 @@ pipeline {
                     Status: $currentBuild.currentResult
                     Code Change: 
 		            App url: 
-		    	        example.com
+		    	        http://oddle.hello.com
 		            
 			
                     (Automatic notification - Please don't reply to this email. For further information, please contact DevOps Team)
