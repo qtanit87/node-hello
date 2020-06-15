@@ -89,7 +89,7 @@ pipeline {
 		stage('Deploying docker image to aws ecs cluster') {
 			steps {
 				script {
-					sh returnStdout: true, script: '''
+					sh returnStdout: true, script: """
 						cd ${WORKSPACE}/
 				
 						
@@ -98,16 +98,16 @@ pipeline {
 
 						echo -e "version: '3' \nservices: \n  web: \n    image: ${ecr_profile}.dkr.ecr.${aws_region}.amazonaws.com/${image_name}:latest \n    ports: \n      - \"${service_port}:${ecs_container_port}\" \n    logging: \n      driver: awslogs \n      options: \n        awslogs-group: ecs-tutorial \n        awslogs-region: ${aws_region} \n        awslogs-stream-prefix: web" > docker-compose.yml
 						echo -e "version: 1 \ntask_definition: \n  services: \n    web: \n      cpu_shares: ${ecs_container_cpu} \n      mem_limit: ${ecs_container_memory}" > ecs-params.yml
-						echo -e "{ \n  \""envname\"": \""${service_gitbranch}\"" \n}" > environment.json
+						echo -e "{ \n  \"envname\": \"${service_gitbranch}\" \n}" > environment.json
 						
 						
 
-						/usr/local/bin/ecs-cli compose service rm --cluster-config ${ecs_cluster} --ecs-profile ${ecs_profile}
-						sleep 120
+						#/usr/local/bin/ecs-cli compose service rm --cluster-config ${ecs_cluster} --ecs-profile ${ecs_profile}
+						#sleep 120
 						
-						/usr/local/bin/ecs-cli compose service up --cluster-config ${ecs_cluster} --ecs-profile ${ecs_profile}
+						#/usr/local/bin/ecs-cli compose service up --cluster-config ${ecs_cluster} --ecs-profile ${ecs_profile}
 						
-					'''
+					"""
 				}
 			}
     	}
