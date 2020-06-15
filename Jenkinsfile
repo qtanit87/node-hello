@@ -100,14 +100,12 @@ pipeline {
 						echo -e "version: 1 \ntask_definition: \n  services: \n    web: \n      cpu_shares: ${ecs_container_cpu} \n      mem_limit: ${ecs_container_memory}" > ecs-params.yml
 						echo -e "{ \n  \"envname\": \"${service_gitbranch}\" \n}" > environment.json
 						
-						cat docker-compose.yml
-						cat ecs-params.yml
-						cat environment.json
-
-						#/usr/local/bin/ecs-cli compose service rm --cluster-config ${ecs_cluster} --ecs-profile ${ecs_profile}
-						#sleep 120
 						
-						#/usr/local/bin/ecs-cli compose service up --cluster-config ${ecs_cluster} --ecs-profile ${ecs_profile}
+
+						/usr/local/bin/ecs-cli compose service rm --cluster-config ${ecs_cluster} --ecs-profile ${ecs_profile}
+						sleep 120
+						
+						/usr/local/bin/ecs-cli compose service up --cluster-config ${ecs_cluster} --ecs-profile ${ecs_profile}
 						
 					'''
 				}
