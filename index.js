@@ -6,7 +6,7 @@ const appinfo = require('./package.json');
 const server = http.createServer((req, res) => {
   res.statusCode = 200;
   const msg = 'Oddle Hello!'
-  res.write(`${msg} ${appinfo.name}-${appinfo.version} staging`);
+  res.write(`${msg} ${appinfo.name}-${appinfo.version}`);
   res.end();
 });
 
