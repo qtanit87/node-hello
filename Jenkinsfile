@@ -117,7 +117,7 @@ pipeline {
 	post ('Cleaning up workspace and sending notification email') {
 		always {
 			//cleaning up jenkins job workspace
-			cleanWs()
+			//cleanWs()
 
 			//sending notification email to management team
 			script {
