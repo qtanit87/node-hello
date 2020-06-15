@@ -52,7 +52,8 @@ pipeline {
 				script {
 					sh returnStdout: true, script: '''
 						cd ${WORKSPACE}/
-						echo ${env.image_name}
+						echo ${image_name}
+						echo ${service_gitbranch}
 						#create Docker file
 						echo -e 'FROM node:10 \nWORKDIR /usr/src/app  \nCOPY package*.json ./ \nRUN npm install \nCOPY . . \nEXPOSE 3000 \nCMD [ "node", "index.js" ]' > Dockerfile
 						echo -e "node_modules \nnpm-debug.log " > .dockerignore
