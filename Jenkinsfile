@@ -58,6 +58,7 @@ pipeline {
 						echo -e "node_modules \nnpm-debug.log " > .dockerignore
 						
 						#delete old image and create a new image
+						echo ${image_name}
 						docker image rm ${image_name} | true
 						docker build -t ${image_name} .
 							
