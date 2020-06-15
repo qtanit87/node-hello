@@ -6,7 +6,7 @@ const appinfo = require('./environment.json');
 const server = http.createServer((req, res) => {
   res.statusCode = 200;
   const msg = 'Oddle Hello!'
-  res.write(`${msg} ${appinfo.name}-${appinfo.version} ${environment.envname}`);
+  res.write(`${msg} ${appinfo.name}-${appinfo.version}`);
   res.end();
 });
 
