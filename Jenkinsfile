@@ -105,15 +105,16 @@ pipeline {
 						
 						echo -e "version: '3' \nservices: \n  web: \n    image: 688881585294.dkr.ecr.ap-southeast-1.amazonaws.com/testing:latest \n    ports: \n      - \"80:3000\" \n    logging: \n      driver: awslogs \n      options: \n        awslogs-group: ecs-tutorial \n        awslogs-region: ap-southeast-1 \n        awslogs-stream-prefix: web" > docker-compose.yml
 						echo -e "version: 1 \ntask_definition: \n  services: \n    web: \n      cpu_shares: 100 \n      mem_limit: 524288000" > ecs-params.yml
-
-						/usr/local/bin/ecs-cli compose service rm --cluster-config ecs-cluster --ecs-profile ecs-cluster
-						/usr/local/bin/ecs-cli down --force --cluster-config ecs-cluster --ecs-profile ecs-cluster
+						echo -e "environment=staging\n"
+						#/usr/local/bin/ecs-cli compose service rm --cluster-config ecs-cluster --ecs-profile ecs-cluster
+						#/usr/local/bin/ecs-cli down --force --cluster-config ecs-cluster --ecs-profile ecs-cluster
 						
 						/usr/local/bin/ecs-cli configure --cluster ecs-cluster --default-launch-type EC2 --config-name ecs-cluster --region ap-southeast-1
-						/usr/local/bin/ecs-cli up --keypair MISR_KEY --capability-iam --size 1 --instance-type t2.medium --cluster-config ecs-cluster --ecs-profile ecs-cluster
-						/usr/local/bin/ecs-cli compose up --create-log-groups --cluster-config ecs-cluster --ecs-profile ecs-cluster
+						#/usr/local/bin/ecs-cli up --keypair MISR_KEY --capability-iam --size 1 --instance-type t2.medium --cluster-config ecs-cluster --ecs-profile ecs-cluster
+						#/usr/local/bin/ecs-cli compose up --cluster-config ecs-cluster --ecs-profile ecs-cluster
 						#/usr/local/bin/ecs-cli compose down --cluster-config ecs-cluster --ecs-profile ecs-cluster
-						/usr/local/bin/ecs-cli compose service up --cluster-config ecs-cluster --ecs-profile ecs-cluster
+						#/usr/local/bin/ecs-cli compose service up --cluster-config ecs-cluster --ecs-profile ecs-cluster
+						aws ecs update-service --cluster ecs-cluster --service multibranch_staging --force-new-deployment
 					'''
 				}
 			}
