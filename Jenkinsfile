@@ -97,7 +97,7 @@ pipeline {
 						/usr/local/bin/ecs-cli configure --cluster ${ecs_cluster} --default-launch-type EC2 --config-name ecs-cluster --region ${aws_region}
 
 						echo -e "version: '3' \nservices: \n  web: \n    image: ${ecr_profile}.dkr.ecr.${aws_region}.amazonaws.com/${image_name}:latest \n    ports: \n      - \"${service_port}:${ecs_container_port}\" \n    logging: \n      driver: awslogs \n      options: \n        awslogs-group: ecs-tutorial \n        awslogs-region: ${aws_region} \n        awslogs-stream-prefix: web" > docker-compose.yml
-						echo -e "version: 1 \ntask_definition: \n  services: \n    web: \n      cpu_shares: ${ecs_instance_cpu} \n      mem_limit: ${ecs_instance_memory}" > ecs-params.yml
+						echo -e "version: 1 \ntask_definition: \n  services: \n    web: \n      cpu_shares: ${ecs_container_cpu} \n      mem_limit: ${ecs_container_memory}" > ecs-params.yml
 						echo -e "{ \n  \"envname\": \"${service_gitbranch}\" \n}" > environment.json
 						
 						cat docker-compose.yml
