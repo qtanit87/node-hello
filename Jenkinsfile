@@ -26,12 +26,8 @@ pipeline {
 					load "${WORKSPACE}/env.groovy"
    					echo "${env.gitowner}"
    					echo "${env.ibranch}"
-					script {				
-							
-							
-							env.appgiturl="https://github.com/qtanit87/node-hello.git"
-												
-							
+					script {
+
 							def VERSION = VersionNumber projectStartDate: '', versionNumberString: '${BUILD_DATE_FORMATTED, "yyyy_MM_dd"}_${BUILD_NUMBER}', versionPrefix: ''
 							env.DPLVERSION="${VERSION}"																		
 							currentBuild.displayName = VERSION
@@ -43,7 +39,7 @@ pipeline {
 			
 			steps {
 				script {
-					
+					echo "${env.ibranch}"
 					echo "Checkout hello nodejs Code"
 					checkout([$class: 'GitSCM', branches: [[name: "*/${BRANCH_NAME}"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'admin', url: "${appgiturl}"]]])
 					
@@ -112,16 +108,11 @@ pipeline {
 						echo -e "version: 1 \ntask_definition: \n  services: \n    web: \n      cpu_shares: 100 \n      mem_limit: 524288000" > ecs-params.yml
 						echo -e "{ \n  \"envname\": \"staging\" \n}" > environment.json
 						
-						/usr/local/bin/ecs-cli compose service rm --cluster-config ecs-cluster --ecs-profile ecs-cluster
-						sleep 120
-						#/usr/local/bin/ecs-cli down --force --cluster-config ecs-cluster --ecs-profile ecs-cluster
+						#/usr/local/bin/ecs-cli compose service rm --cluster-config ecs-cluster --ecs-profile ecs-cluster
+						#sleep 120
 						
+						#/usr/local/bin/ecs-cli compose service up --cluster-config ecs-cluster --ecs-profile ecs-cluster
 						
-						#/usr/local/bin/ecs-cli up --keypair MISR_KEY --capability-iam --size 1 --instance-type t2.medium --cluster-config ecs-cluster --ecs-profile ecs-cluster
-						#/usr/local/bin/ecs-cli compose up --cluster-config ecs-cluster --ecs-profile ecs-cluster
-						#/usr/local/bin/ecs-cli compose down --cluster-config ecs-cluster --ecs-profile ecs-cluster
-						/usr/local/bin/ecs-cli compose service up --cluster-config ecs-cluster --ecs-profile ecs-cluster
-						#aws ecs update-service --cluster ecs-cluster --service multibranch_staging --region ap-southeast-1 --force-new-deployment
 					'''
 				}
 			}
