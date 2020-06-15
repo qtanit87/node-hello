@@ -18,12 +18,7 @@ pipeline {
 			steps {
 					//loading environment variables from env.groovy file
 					load "${WORKSPACE}/env.groovy"
-					script {
-
-							def VERSION = VersionNumber projectStartDate: '', versionNumberString: '${BUILD_DATE_FORMATTED, "yyyy_MM_dd"}_${BUILD_NUMBER}', versionPrefix: ''
-							env.DPLVERSION="${VERSION}"																		
-							currentBuild.displayName = VERSION
-						}
+					
 			}
 		}
 		
