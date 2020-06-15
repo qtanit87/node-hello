@@ -124,7 +124,7 @@ pipeline {
 	}
 	post ('sending email') {
 		always {
-			
+			cleanWs()
 			script {
 					mail bcc: '', body: """
                     Jenkins Job: ${JOB_NAME}
