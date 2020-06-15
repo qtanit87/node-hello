@@ -113,7 +113,7 @@ pipeline {
 						
 						#/usr/local/bin/ecs-cli up --keypair MISR_KEY --capability-iam --size 1 --instance-type t2.medium --cluster-config ecs-cluster --ecs-profile ecs-cluster
 						#/usr/local/bin/ecs-cli compose up --cluster-config ecs-cluster --ecs-profile ecs-cluster
-						/usr/local/bin/ecs-cli compose down --cluster-config ecs-cluster --ecs-profile ecs-cluster
+						#/usr/local/bin/ecs-cli compose down --cluster-config ecs-cluster --ecs-profile ecs-cluster
 						/usr/local/bin/ecs-cli compose service up --cluster-config ecs-cluster --ecs-profile ecs-cluster
 						#aws ecs update-service --cluster ecs-cluster --service multibranch_staging --region ap-southeast-1 --force-new-deployment
 					'''
